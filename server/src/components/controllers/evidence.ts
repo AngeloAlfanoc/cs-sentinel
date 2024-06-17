@@ -1,0 +1,52 @@
+import { OK } from 'http-status';
+import { EvidenceService } from '../services/evidenceService';
+import { apiResponse, InternalServerError } from '@/helpers/apiResponse';
+
+export class EvidenceController {
+  static getEvidenceById = async (req: Req, res: Res) => {
+    try {
+      const { evidenceId } = req.params;
+      const evidence = await EvidenceService.getEvidenceById(evidenceId);
+      return res.status(OK).json(
+        apiResponse({
+          message: 'Successfully retrieved evidence',
+          data: evidence,
+        })
+      );
+    } catch (error) {
+      console.error('Error in getting evidence:', error);
+      return InternalServerError(res);
+    }
+  };
+
+  static getEvidenceBySteamId = async (req: Req, res: Res) => {
+    try {
+      const { steamId } = req.params;
+      const evidence = await EvidenceService.getEvidenceBySteamId(steamId);
+      return res.status(OK).json(
+        apiResponse({
+          message: 'Successfully retrieved evidence',
+          data: evidence,
+        })
+      );
+    } catch (error) {
+      console.error('Error in getting evidence:', error);
+      return InternalServerError(res);
+    }
+  };
+
+  static getEvidencesByFlagged = async (_req: Req, res: Res) => {
+    try {
+      const evidence = await EvidenceService.getEvidencesByFlagged('userId');
+      return res.status(OK).json(
+        apiResponse({
+          message: 'Successfully retrieved all evidence',
+          data: evidence,
+        })
+      );
+    } catch (error) {
+      console.error('Error in getting evidence:', error);
+      return InternalServerError(res);
+    }
+  };
+}
