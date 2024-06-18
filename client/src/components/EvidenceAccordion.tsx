@@ -1,16 +1,15 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useState, useRef, useEffect } from 'react';
 
 import { fetchEvidenceBySteamId } from '../api/evidence';
-import LiteYouTubeEmbed from 'react-lite-youtube-embed';
-import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronUp, faChevronDown } from '@fortawesome/free-solid-svg-icons';
 import { useQuery } from '@tanstack/react-query';
 import EvidenceComments from './EvidenceComments';
 import EvidenceCommentInput from './EvidenceCommentInput';
 import { Link } from '@tanstack/react-router';
+import YouTubePlayer from 'youtube-player';
 
 // Define types for the evidence data
 interface Evidence {
@@ -22,7 +21,6 @@ interface Evidence {
   demoUrl?: string;
 }
 
-// Props for the EvidenceAccordion component
 interface EvidenceAccordionProperties {
   steamId: string;
 }
@@ -34,6 +32,19 @@ interface EvidenceItemProperties {
 }
 
 const EvidenceItem: React.FC<EvidenceItemProperties> = ({ item, isOpen, onToggle }) => {
+  const playerReference = useRef(null);
+
+  useEffect(() => {
+    if (item.videoLink && isOpen) {
+      const videoID = new URL(item.videoLink!).searchParams.get('v');
+      if (playerReference.current && videoID) {
+        const player = YouTubePlayer(playerReference.current);
+        player.loadVideoById(videoID);
+        player.playVideo();
+      }
+    }
+  }, [isOpen, item.videoLink]);
+
   if (item.videoLink) {
     const videoID = new URL(item.videoLink!).searchParams.get('v');
 
@@ -68,7 +79,9 @@ const EvidenceItem: React.FC<EvidenceItemProperties> = ({ item, isOpen, onToggle
         >
           <div className='p-4 grid grid-cols-1 md:grid-cols-3 gap-4'>
             <div className='md:col-span-2'>
-              {item.videoLink && <LiteYouTubeEmbed id={videoID!} title={item.description} />}
+              {item.videoLink && (
+                <div style={{ width: '100%', height: '400px' }} ref={playerReference}></div>
+              )}
             </div>
             <div className='bg-gray-900 p-4 rounded-lg text-gray-300'>
               <div className='flex justify-end'>
@@ -94,12 +107,6 @@ const EvidenceItem: React.FC<EvidenceItemProperties> = ({ item, isOpen, onToggle
         </div>
       </div>
     );
-  }
-  if (item.imagesUrls) {
-    return <>image</>;
-  }
-  if (item.demoUrl) {
-    return <>demo</>;
   }
 };
 
