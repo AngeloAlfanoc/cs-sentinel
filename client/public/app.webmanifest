@@ -1,0 +1,25 @@
+{
+  "lang": "en-EN",
+  "name": "CS Sentinel",
+  "short_name": "CS Sentinel",
+  "description": "The CS Sentinel Community App is a collaborative platform designed to combat cheating in various contexts by empowering users to report suspected cheaters. This application serves as a central hub where community members can come together to share information, and other evidence types.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#000",
+  "background_color": "#000",
+  "icons": [
+    {
+      "src": "/favicon/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/favicon/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
