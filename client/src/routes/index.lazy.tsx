@@ -16,7 +16,7 @@ export const Route = createLazyFileRoute('/')({
 function Index() {
   const { t } = useTranslation();
   const { data, error, isLoading, isError } = useQuery({
-    queryKey: ['evidences'],
+    queryKey: ['flaggedEvidences'],
     queryFn: () => fetchEvidencesByFlagged(),
     select: (data) => {
       return data;
@@ -24,7 +24,6 @@ function Index() {
   });
 
   const [index, setIndex] = useState(0);
-  const [isScrolling, setIsScrolling] = useState(false);
 
   if (isLoading) return <div>{t('loading_evidence')}</div>;
   if (isError) return <div>{`${t('error_occurred')} ${error?.message}`}</div>;
@@ -35,7 +34,6 @@ function Index() {
   };
 
   const handleScroll = throttle((event: React.WheelEvent<HTMLDivElement>) => {
-    if (isScrolling) return;
     const operator = event.deltaY / 100;
     const newIndex = index + operator;
     const dataLength = (data?.data.data.length ?? 0);

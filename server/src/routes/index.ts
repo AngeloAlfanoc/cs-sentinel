@@ -122,7 +122,7 @@ router.post(
   '/evidence/flag/:evidenceId',
   verifyToken,
   sanitizer(appKeyValidator),
-  EvidenceController.getEvidencesByFlagged
+  EvidenceController.flagEvidenceByUser
 );
 
 export default router;

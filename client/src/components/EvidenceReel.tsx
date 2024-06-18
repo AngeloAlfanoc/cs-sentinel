@@ -1,15 +1,23 @@
 import { useState, useEffect, useRef } from 'react';
 import YouTubePlayer from 'youtube-player';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComment, faShare, faUserSecret, faUserNinja, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
+import {
+  faComment,
+  faShare,
+  faUserSecret,
+  faUserNinja,
+  faCheckCircle
+} from '@fortawesome/free-solid-svg-icons';
 import { EvidenceData } from '../types/evidence';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { fetchEvidenceCommentsByEvidenceId } from '../api/suspect';
 import { useNavigate } from '@tanstack/react-router';
 import useModalStore from '../stores/useModalStore';
 import ReviewResolutionContent from './Modal/ReviewResolutionContent';
 import GenericFooter from './Modal/GenericFooter';
 import ReviewResolutionFooter from './Modal/ReviewResolutionFooter';
+import { flagEvidenceByUser } from '../api/evidence';
+import queryClient from '../helpers/withQueryClient';
 
 type EvidenceProperties = {
   evidence: EvidenceData;
@@ -34,45 +42,58 @@ const EvidenceReel: React.FC<EvidenceProperties> = ({ evidence, onVote }) => {
     enabled: !!evidence._id
   });
 
+  const { mutateAsync } = useMutation({
+    mutationFn: flagEvidenceByUser,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({
+        queryKey: ['flaggedEvidences']
+      });
+      queryClient.setQueryData(['flaggedEvidences'], data);
+    },
+    onError: (error) => {
+      console.error('Error marking evidence', error);
+    }
+  });
+
   const videoID = evidence.videoLink
     ? new URL(evidence.videoLink).searchParams.get('v')
     : undefined;
 
-    useEffect(() => {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              setIsVisible(true);
-            } else {
-              setIsVisible(false);
-            }
-          });
-        },
-        { threshold: 0.25 }
-      );
-  
-      if (playerReference.current) {
-        observer.observe(playerReference.current);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            setIsVisible(true);
+          } else {
+            setIsVisible(false);
+          }
+        }
+      },
+      { threshold: 0.25 }
+    );
+
+    if (playerReference.current) {
+      observer.observe(playerReference.current);
+    }
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isVisible && videoID) {
+      if (!playerInstance.current && playerReference.current) {
+        playerInstance.current = YouTubePlayer(playerReference.current);
       }
-  
-      return () => {
-        observer.disconnect();
-      };
-    }, []);
-  
-    useEffect(() => {
-      if (isVisible && videoID) {
-        if (!playerInstance.current && playerReference.current) {
-          playerInstance.current = YouTubePlayer(playerReference.current);
-        }
-        if (playerInstance.current) {
-          playerInstance.current.loadVideoById(videoID);
-          playerInstance.current.playVideo();
-          setPlaying(true);
-        }
-      } 
-    }, [isVisible, videoID]);
+      if (playerInstance.current) {
+        playerInstance.current.loadVideoById(videoID);
+        playerInstance.current.playVideo();
+        setPlaying(true);
+      }
+    }
+  }, [isVisible, videoID]);
 
   const amountOfComments = comments?.data?.data?.length ?? 0;
 
@@ -132,7 +153,9 @@ const EvidenceReel: React.FC<EvidenceProperties> = ({ evidence, onVote }) => {
             disabled={commentsLoading}
             type='button'
             className='text-gray-700 bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-xl h-12 w-12 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 flex items-center justify-center disabled:cursor-not-allowed'
-            onClick={() => onVote(evidence._id, 'comment')}
+            onClick={() => {
+              return mutateAsync(evidence._id);
+            }}
           >
             <FontAwesomeIcon icon={faCheckCircle} />
           </button>

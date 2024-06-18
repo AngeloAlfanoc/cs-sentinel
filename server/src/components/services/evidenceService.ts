@@ -40,10 +40,39 @@ export class EvidenceService {
     return evidence;
   }
 
-  static async getEvidencesByFlagged(_userId: string) {
-    const { evidenceCollection } = await EvidenceService.initDBCollections();
-    const evidence = await evidenceCollection.find({}).toArray();
-    return evidence;
+  static async getEvidencesByFlagged(userId?: string) {
+    const { evidenceCollection, flaggedEvidenceCollection } =
+      await EvidenceService.initDBCollections();
+
+    let evidences;
+
+    if (!userId) {
+      // Fetch all evidences if no userId is provided
+      evidences = await evidenceCollection.find({}).toArray();
+    } else {
+      // Fetch flagged evidence documents for the user
+      const flaggedEvidences = await flaggedEvidenceCollection
+        .find({ userId })
+        .toArray();
+      const flaggedEvidenceIds = flaggedEvidences.map(
+        (f) => new ObjectId(f.evidenceId)
+      );
+
+      // Logging to debug flagged evidence IDs
+      console.log('Flagged Evidence IDs:', flaggedEvidenceIds);
+
+      // Fetch evidences excluding the flagged ones
+      evidences = await evidenceCollection
+        .find({
+          _id: { $nin: flaggedEvidenceIds },
+        })
+        .toArray();
+
+      // Logging to debug the final evidences
+      console.log('Evidences after filtering:', evidences);
+    }
+
+    return evidences;
   }
 
   static async getEvidenceById(evidenceId: string) {
@@ -63,10 +92,12 @@ export class EvidenceService {
     const { flaggedEvidenceCollection } =
       await EvidenceService.initDBCollections();
 
-    const evidence = await flaggedEvidenceCollection.insertOne({
+    await flaggedEvidenceCollection.insertOne({
       evidenceId: evidenceId,
       userId: userId,
     });
-    return evidence;
+
+    const evidences = this.getEvidencesByFlagged(userId);
+    return evidences;
   }
 }

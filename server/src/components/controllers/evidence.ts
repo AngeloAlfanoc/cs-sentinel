@@ -35,13 +35,19 @@ export class EvidenceController {
     }
   };
 
-  static getEvidencesByFlagged = async (_req: Req, res: Res) => {
+  static getEvidencesByFlagged = async (req: Req, res: Res) => {
     try {
-      const evidence = await EvidenceService.getEvidencesByFlagged('userId');
+      const { user } = req;
+      let evidences;
+      console.log('user', user?.user.id);
+      if (!user) {
+        evidences = await EvidenceService.getEvidencesByFlagged();
+      }
+      evidences = await EvidenceService.getEvidencesByFlagged(user?.user.id);
       return res.status(OK).json(
         apiResponse({
           message: 'Successfully retrieved all evidence',
-          data: evidence,
+          data: evidences,
         })
       );
     } catch (error) {
