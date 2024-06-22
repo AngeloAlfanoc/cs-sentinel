@@ -2,7 +2,7 @@ import React from 'react';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@tanstack/react-query';
-import { addSuspectLink } from '../../api/suspect';
+import { addRelationShip, addSuspectLink } from '../../api/suspect';
 import queryClient from '../../helpers/withQueryClient';
 import { getValidationSchema } from '../Forms/AddLinkForm/validationScheme';
 import useModalStore from '../../stores/useModalStore';
@@ -18,7 +18,7 @@ const RelationShipModalContent: React.FC<Properties> = ({ steamId, relationShipT
   const { toggleModal } = useModalStore();
   const { mutateAsync } = useMutation({
     mutationFn: (data: { steamId: string; linkData: { link: string; type: string } }) =>
-      addSuspectLink(data.steamId, data.linkData),
+      addRelationShip(data.steamId, data.linkData),
     onSuccess: (data) => {
       console.log('Link successfully added', data);
       queryClient.invalidateQueries({ queryKey: ['suspect', steamId] });

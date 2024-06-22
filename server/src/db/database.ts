@@ -1,3 +1,4 @@
+// db/database.ts
 import { MongoClient, MongoClientOptions, Db } from 'mongodb';
 import CONFIG from '@/config';
 

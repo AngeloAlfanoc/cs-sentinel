@@ -8,6 +8,7 @@ interface DBCollections {
   evidenceCollection: Collection;
   commentsCollection: Collection;
   linksCollection: Collection;
+  suspectRelationShip: Collection;
 }
 
 export class SuspectService {
@@ -20,6 +21,7 @@ export class SuspectService {
         evidenceCollection: db.collection('evidence'),
         commentsCollection: db.collection('suspectComments'),
         linksCollection: db.collection('suspectLinks'),
+        suspectRelationShip: db.collection('suspectRelationship'),
       };
     }
     return this.dbCollections;
@@ -201,6 +203,30 @@ export class SuspectService {
         if (!insertResult.acknowledged) {
           throw new Error('Failed to insert new link');
         }
+      }
+
+      return {};
+    } catch (error: any) {
+      console.error('Failed to add/update link to suspect:', error);
+      return { error: error.message || 'Unknown error occurred' };
+    }
+  }
+
+  static async addRelationshipToSuspect(
+    steamId: string,
+    linkData: { link: string; type: string }
+  ): Promise<{ error?: string }> {
+    try {
+      const { suspectRelationShip } = await this.initDBCollections();
+
+      // Create a new link entry
+      const insertResult = await suspectRelationShip.insertOne({
+        steamId,
+        ...linkData,
+      });
+
+      if (!insertResult.acknowledged) {
+        throw new Error('Failed to insert new link');
       }
 
       return {};

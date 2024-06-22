@@ -60,7 +60,7 @@ export const addSuspectLink = async (steamId: string, linkData: { link: string; 
 
 export const addRelationShip = async (steamId: string, linkData: { link: string; type: string }) => {
   try {
-    const response = await axiosInstance.post(`/suspect/${steamId}/add_relationshio`, linkData);
+    const response = await axiosInstance.post(`/suspect/${steamId}/add_relationship`, linkData);
     return response.data;
   } catch (error: any) {
     if (error.response) {

@@ -3,7 +3,7 @@ import { SuspectData } from '../types/suspect';
 import { Link } from '@tanstack/react-router';
 import { useTranslation } from 'react-i18next';
 
-const SteamProfile = (suspect: SuspectData) => {
+const FaceitProfile = (suspect: SuspectData) => {
   const { t } = useTranslation();
   if (suspect.links.some((link) => link.type.toLowerCase() === 'faceit')) {
     return (
@@ -25,7 +25,11 @@ const SteamProfile = (suspect: SuspectData) => {
         />
         <h1 className='text-xl font-bold mt-3'>{suspect?.personaName}</h1>
         <p className='mt-1'>
-          <strong>Faceit Name:</strong> {suspect?.steamId}
+          <strong>Faceit Name:</strong> {suspect?.links.find((link) => {
+            const faceitLink = link.type.toLowerCase() === 'faceit';
+            const lastIndexOfSlash = link.link.lastIndexOf('/');
+            return link.link.slice(lastIndexOfSlash + 1 , link.link.length);
+          })?.link}
         </p>
         <Link
           to={suspect?.links.find((link) => link.type.toLowerCase() === 'faceit')?.link}
@@ -38,4 +42,4 @@ const SteamProfile = (suspect: SuspectData) => {
   }
 };
 
-export default SteamProfile;
+export default FaceitProfile;

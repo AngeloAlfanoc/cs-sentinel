@@ -87,4 +87,36 @@ export class SuspectController {
       return InternalServerError(res);
     }
   };
+
+  static addRelationShip = async (req: Req, res: Res) => {
+    try {
+      const { steamId } = req.params;
+      const { link, type } = req.body;
+      const { user } = req;
+      if (!link || !type || !user) {
+        return res.status(BAD_REQUEST).json({
+          status: BAD_REQUEST,
+          message: 'Link and type are required.',
+        });
+      }
+
+      const { error } = await SuspectService.addRelationshipToSuspect(steamId, {
+        link,
+        type,
+      });
+
+      if (error) {
+        return res.status(BAD_REQUEST).json(apiResponse({ error }));
+      }
+
+      return res
+        .status(OK)
+        .json(
+          apiResponse({ message: 'Relationship added/updated successfully' })
+        );
+    } catch (error) {
+      console.error('Error in adding relationship:', error);
+      return InternalServerError(res);
+    }
+  };
 }

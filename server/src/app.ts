@@ -13,8 +13,8 @@ import * as errorHandler from '@/middlewares/errorHandler';
 import routes from '@/routes';
 
 export const createApp = async (): Promise<Application> => {
-  const app = express();
   const db = await MongoDB.connectDB();
+  const app = express();
 
   app.locals.db = db;
 

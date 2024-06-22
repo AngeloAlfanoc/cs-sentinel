@@ -39,6 +39,7 @@ function Suspect() {
     enabled: !!steamId
   });
 
+
   if (suspectLoading) return <div className='text-white'>{t('loading')}</div>;
   if (suspectError instanceof Error)
     return <div className='text-red-500'>{`${t('error_occurred')} ${suspectError.message}`}</div>;
@@ -73,6 +74,21 @@ function Suspect() {
     navigator.clipboard.writeText(window.location.href);
     toast.success(t('link_copied'));
   };
+
+  const data = {
+    name: 'methoDs',
+    children: [
+      {
+        name: 'Child One',
+        children: []
+      },
+      {
+        name: 'Child Two',
+        children: []
+      }
+    ]
+  };
+
 
   return (
     <Tabs defaultIndex={0}>
@@ -117,7 +133,7 @@ function Suspect() {
         </div>
       </TabPanel>
       <TabPanel label={t('tabs_relationship')}>
-        <div className='p-5 bg-gray-800 text-white shadow-lg'>
+        <div className='p-5 bg-gray-800 text-white'>
           <div className='flex flex-row items-center justify-between mb-5'>
             <h1 className='text-2xl font-bold'>{t('suspect_profile_page')}</h1>
             <div className='space-x-2'>
@@ -136,8 +152,8 @@ function Suspect() {
             </div>
           </div>
         </div>
-        <div className='p-5 bg-gray-800 text-white rounded-lg shadow-lg'>
-          <Relationships />
+        <div className='p-5 bg-gray-800 text-white rounded-lg '>
+          <Relationships  name={data.name} children={data.children} />
         </div>
       </TabPanel>
     </Tabs>

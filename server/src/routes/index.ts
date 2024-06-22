@@ -64,6 +64,7 @@ router.get(
 router.post(
   '/suspect/comments',
   verifyToken,
+
   sanitizer(appKeyValidator),
   CommentController.submitSuspectComment
 );
@@ -71,13 +72,23 @@ router.post(
 router.post(
   '/suspect/:steamId/add_link',
   verifyToken,
+
   sanitizer(appKeyValidator),
   SuspectController.addSuspectLink
+);
+
+router.post(
+  '/suspect/:steamId/add_relationship',
+  verifyToken,
+
+  sanitizer(appKeyValidator),
+  SuspectController.addRelationShip
 );
 
 router.delete(
   '/suspect/comments/:commentId',
   verifyToken,
+
   sanitizer(appKeyValidator),
   CommentController.deleteSuspectCommentByUserId
 );
@@ -115,12 +126,14 @@ router.post(
   '/evidence/comments',
   verifyToken,
   sanitizer(appKeyValidator),
+
   CommentController.submitEvidenceCommentByEvidenceId
 );
 
 router.post(
   '/evidence/flag/:evidenceId',
   verifyToken,
+
   sanitizer(appKeyValidator),
   EvidenceController.flagEvidenceByUser
 );
