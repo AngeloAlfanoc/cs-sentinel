@@ -84,3 +84,14 @@
 ::-webkit-scrollbar-thumb:hover {
   background-color: #555;
 }
+
+
+.tree-container {
+  overflow: auto;
+}
+
+.custom {
+  fill: #fff;
+  stroke: #fff;
+  stroke-width: 1.5px;
+}

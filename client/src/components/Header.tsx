@@ -47,11 +47,8 @@ function Header() {
     return (
       <nav className='p-4 flex justify-between items-center shadow-md bg-gray-800 text-white'>
         <div className='flex items-center'>
-          <button className='text-xl md:hidden' onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            <FontAwesomeIcon icon={faBars} />
-          </button>
           <img src={logo} alt='Logo' className='h-8' />
-          <h1 className='text-xl font-bold hidden md:block ml-2 mr-4'>
+          <h1 className='text-xl font-bold md:block ml-2 mr-4'>
             <Link to='/'>{t('app_name')}</Link>
           </h1>
         </div>

@@ -57,3 +57,21 @@ export const addSuspectLink = async (steamId: string, linkData: { link: string; 
     }
   }
 };
+
+export const addRelationShip = async (steamId: string, linkData: { link: string; type: string }) => {
+  try {
+    const response = await axiosInstance.post(`/suspect/${steamId}/add_relationshio`, linkData);
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      console.error('Failed to add relationship:', error.response.data);
+      throw new Error(error.response.data.message || 'Error adding relationship');
+    } else if (error.request) {
+      console.error('No response received:', error.request);
+      throw new Error('No response from server');
+    } else {
+      console.error('Error setting up your request:', error.message);
+      throw new Error('Error setting up request');
+    }
+  }
+};

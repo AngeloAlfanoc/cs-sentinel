@@ -1,0 +1,1 @@
+export const relationShipTypes = ['Friend', 'Smurf', 'Main Account', 'Throw Away Account'];

@@ -17,6 +17,8 @@ import RelationShipModalContent from '../components/Modal/RelationShipModalConte
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShareSquare as faShare } from '@fortawesome/free-solid-svg-icons';
 import { toast } from 'react-toastify';
+import { relationShipTypes } from '../constants/suspect';
+import Relationships from '../components/Relationships';
 
 export const suspectRoute = createLazyFileRoute('/suspect/$steamId')({
   component: Suspect
@@ -59,7 +61,9 @@ function Suspect() {
   const toggleRelationShipModal = () => {
     setPayload({
       modalHeader: <>Add relationship to {suspectedUser?.personaName}</>,
-      modalContent: <RelationShipModalContent />,
+      modalContent: (
+        <RelationShipModalContent steamId={steamId} relationShipTypes={relationShipTypes} />
+      ),
       modalFooter: <GenericFooter />
     });
     toggleModal();
@@ -113,7 +117,28 @@ function Suspect() {
         </div>
       </TabPanel>
       <TabPanel label={t('tabs_relationship')}>
-        <div className='p-5 bg-gray-800 text-white rounded-lg shadow-lg'>Relationships</div>
+        <div className='p-5 bg-gray-800 text-white shadow-lg'>
+          <div className='flex flex-row items-center justify-between mb-5'>
+            <h1 className='text-2xl font-bold'>{t('suspect_profile_page')}</h1>
+            <div className='space-x-2'>
+              <button
+                onClick={() => toggleRelationShipModal()}
+                className='py-2 px-4 bg-indigo-600 hover:bg-indigo-700 transition duration-300 rounded text-white'
+              >
+                {t('add_relationship')}
+              </button>
+              <button
+                onClick={() => copyLink()}
+                className='py-2 px-4 bg-indigo-600 hover:bg-indigo-700 transition duration-300 rounded text-white'
+              >
+                <FontAwesomeIcon icon={faShare} />
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className='p-5 bg-gray-800 text-white rounded-lg shadow-lg'>
+          <Relationships />
+        </div>
       </TabPanel>
     </Tabs>
   );
