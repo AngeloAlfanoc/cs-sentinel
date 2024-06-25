@@ -91,7 +91,10 @@ function SuspectEvidence() {
           <strong>Description:</strong> {evidence.description}
         </div>
         <div className='mt-4'>
-          <EvidenceComments evidenceId={evidence._id} />
+          <div>
+                     <EvidenceComments evidenceId={evidence._id} />
+          </div>
+ 
           <div className='mt-4'>
             <EvidenceCommentInput evidenceId={evidence._id} />
           </div>

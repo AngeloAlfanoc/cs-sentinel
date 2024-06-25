@@ -25,12 +25,9 @@ const FaceitProfile = (suspect: SuspectData) => {
         />
         <h1 className='text-xl font-bold mt-3'>{suspect?.personaName}</h1>
         <p className='mt-1'>
-          <strong>Faceit Name:</strong> {suspect?.links.find((link) => {
-            const faceitLink = link.type.toLowerCase() === 'faceit';
-            const lastIndexOfSlash = link.link.lastIndexOf('/');
-            return link.link.slice(lastIndexOfSlash + 1 , link.link.length);
-          })?.link}
+          <strong>Faceit Name:</strong> {suspect?.links.find((link) => link.type.toLowerCase() === 'faceit')?.link.split('/').pop()}
         </p>
+
         <Link
           to={suspect?.links.find((link) => link.type.toLowerCase() === 'faceit')?.link}
           className='mt-1 text-blue-300 hover:text-blue-700'

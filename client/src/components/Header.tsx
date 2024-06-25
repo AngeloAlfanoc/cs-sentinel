@@ -8,6 +8,7 @@ import { Link, useNavigate, useRouterState } from '@tanstack/react-router';
 import logo from '../assets/logo_w.webp'; // Import the WebP file
 import { login } from '../routes/router';
 import { useTranslation } from 'react-i18next';
+import SearchComponent from './SearchComponent';
 
 function Header() {
   const navigate = useNavigate();
@@ -51,7 +52,9 @@ function Header() {
           <h1 className='text-xl font-bold md:block ml-2 mr-4'>
             <Link to='/'>{t('app_name')}</Link>
           </h1>
+          <div><SearchComponent /></div>
         </div>
+  
 
         <div className='flex items-center gap-4'>
           <div

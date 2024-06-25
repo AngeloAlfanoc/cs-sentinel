@@ -2,7 +2,7 @@ import React from 'react';
 
 const ReviewResolutionContent = () => {
   return (
-    <div className='p-2 bg-gray-800 text-white rounded-lg max-w-4xl mx-auto mt-10 overflow-y-auto' style={{ maxHeight: '80vh' }}>
+    <div className='p-2 bg-gray-800 text-white rounded-lg max-w-4xl mx-auto mt-10 overflow-auto' style={{ maxHeight: '60vh' }}>
       <p className='mb-4'>
         Now that you've reviewed the evidence, it is your duty to determine the facts for each of
         the categories below. Note that for each category of disruption you should{' '}

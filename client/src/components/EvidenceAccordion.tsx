@@ -84,23 +84,28 @@ const EvidenceItem: React.FC<EvidenceItemProperties> = ({ item, isOpen, onToggle
               )}
             </div>
             <div className='bg-gray-900 p-4 rounded-lg text-gray-300'>
-              <div className='flex justify-end'>
+              <div className='flex justify-between'>
+              <div className='mb-2'>
+                  <strong>Type:</strong> {item.type}
+                </div>
                 <Link
                   to={`/evidence/${item._id}`}
                   className='py-2 px-4 bg-blue-600 hover:bg-blue-700 transition duration-300 rounded text-white'
                 >
                   Open Evidence
                 </Link>
+     
               </div>
-              <div className='mb-2'>
-                <strong>Type:</strong> {item.type}
-              </div>
+
               <div className='mb-2'>
                 <strong>Description:</strong> {item.description}
               </div>
               <div className='mt-4'>
                 <EvidenceComments evidenceId={item._id} />
-                <EvidenceCommentInput evidenceId={item._id} />
+                <div className='mt-4'>
+                  <EvidenceCommentInput evidenceId={item._id} />
+                </div>
+
               </div>
             </div>
           </div>

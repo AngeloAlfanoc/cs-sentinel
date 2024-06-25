@@ -48,7 +48,7 @@ function Index() {
         <div style={{ width: '85%' }}>
           {evidenceData.length > 0 ? (
             evidenceData.map((evidence: EvidenceData) => (
-              <div key={evidence._id} style={{ height: '60vh' }} className='w-full flex flex-col'>
+              <div key={evidence._id} style={{ height: '100vh' }} className='w-full flex flex-col'>
                 <div className='text-white text-3xl font-bold flex justify-start'>
                   <h2>{evidence.name}</h2>
                 </div>

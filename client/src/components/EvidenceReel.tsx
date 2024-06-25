@@ -28,6 +28,7 @@ const EvidenceReel: React.FC<EvidenceProperties> = ({ evidence, onVote }) => {
   const navigate = useNavigate();
   const playerReference = useRef<HTMLDivElement | null>(null);
   const playerInstance = useRef<ReturnType<typeof YouTubePlayer> | null>(null);
+  const [isInView, setIsInView] = useState(false);
 
   const { data: comments, isLoading: commentsLoading } = useQuery({
     queryKey: ['evidenceComments', evidence._id],
@@ -53,15 +54,37 @@ const EvidenceReel: React.FC<EvidenceProperties> = ({ evidence, onVote }) => {
     : undefined;
 
   useEffect(() => {
-    if (videoID) {
+    if (videoID && isInView) {
       if (!playerInstance.current && playerReference.current) {
         playerInstance.current = YouTubePlayer(playerReference.current);
       }
       if (playerInstance.current) {
         playerInstance.current.loadVideoById(videoID);
+        playerInstance.current.playVideo();
       }
     }
-  }, [videoID]);
+  }, [videoID, isInView]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      {
+        threshold: 0.1
+      }
+    );
+
+    if (playerReference.current) {
+      observer.observe(playerReference.current);
+    }
+
+    return () => {
+      if (playerReference.current) {
+        observer.unobserve(playerReference.current);
+      }
+    };
+  }, []);
 
   const amountOfComments = comments?.data?.data?.length ?? 0;
 
@@ -83,8 +106,8 @@ const EvidenceReel: React.FC<EvidenceProperties> = ({ evidence, onVote }) => {
   };
 
   return (
-    <div className='relative w-full h-full flex align-middle'>
-      {videoID && <div style={{ width: '85%', height: '85%' }} ref={playerReference}></div>}
+    <div className='relative w-full h-full flex align-middle' style={{ marginBottom: '200px' }}>
+      {videoID && <div style={{ width: '93%', height: '100%' }} ref={playerReference}></div>}
       <div
         className='flex absolute top-0 right-0 p-4 flex-col items-center text-center'
         style={{ zIndex: 1 }}
