@@ -7,6 +7,7 @@ export type EvidenceData = {
   steamLink?: string;
   imagesUrls?: string[];
   demoUrl?: string;
+  name: string;
 };
 
 export type EvidenceReponseData = {

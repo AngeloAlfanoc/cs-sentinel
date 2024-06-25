@@ -7,12 +7,17 @@ import { fetchEvidenceById } from '../api/evidence';
 import LiteYouTubeEmbed from 'react-lite-youtube-embed';
 import 'react-lite-youtube-embed/dist/LiteYouTubeEmbed.css';
 import { EvidenceData } from '../types/evidence';
+import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShare } from '@fortawesome/free-solid-svg-icons';
 
 export const suspectEvidenceRoute = createLazyFileRoute(suspectWithEvidence)({
   component: SuspectEvidence
 });
 
 function SuspectEvidence() {
+  const { t } = useTranslation();
   const { evidenceId } = suspectEvidenceRoute.useParams<{
     steamId: string;
     evidenceId: string;
@@ -38,6 +43,11 @@ function SuspectEvidence() {
     return <div className='text-center text-gray-500'>No evidence found.</div>;
   }
 
+  const copyLink = () => {
+    navigator.clipboard.writeText(window.location.href);
+    toast.success(t('link_copied'));
+  };
+
   const evidence = data.data.data as EvidenceData;
 
   const videoID = evidence.videoLink
@@ -46,17 +56,19 @@ function SuspectEvidence() {
 
   return (
     <div className='max-w-6xl mx-auto p-4 bg-gray-800 text-white rounded-lg shadow-md'>
-      <h1 className='text-2xl font-semibold mb-4'>{evidence.description}</h1>
+      <div className='flex justify-between mb-2'>
+        <h1 className='text-2xl font-semibold mb-4'>{evidence.description}</h1>
+        <button
+          onClick={() => copyLink()}
+          className='py-2 px-4 bg-indigo-600 hover:bg-indigo-700 transition duration-300 rounded text-white'
+        >
+          <FontAwesomeIcon icon={faShare} />
+        </button>
+      </div>
+
       {evidence.videoLink && videoID && (
         <div className='mb-4'>
           <LiteYouTubeEmbed id={videoID} title={evidence.description} />
-        </div>
-      )}
-      {evidence.imagesUrls && evidence.imagesUrls.length > 0 && (
-        <div className='grid grid-cols-1 md:grid-cols-2 gap-4 mb-4'>
-          {evidence.imagesUrls.map((url: any, index: number) => (
-            <img key={index} src={url} alt={`Evidence ${index + 1}`} className='rounded-lg' />
-          ))}
         </div>
       )}
       {evidence.demoUrl && (
@@ -80,7 +92,9 @@ function SuspectEvidence() {
         </div>
         <div className='mt-4'>
           <EvidenceComments evidenceId={evidence._id} />
-          <EvidenceCommentInput evidenceId={evidence._id} />
+          <div className='mt-4'>
+            <EvidenceCommentInput evidenceId={evidence._id} />
+          </div>
         </div>
       </div>
     </div>

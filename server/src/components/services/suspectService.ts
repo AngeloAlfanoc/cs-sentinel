@@ -72,7 +72,7 @@ export class SuspectService {
         videoLink: suspectData.videoLink,
         description: suspectData.description,
         type: suspectData.type,
-        name: suspectData.name,
+        name: suspectData.evidenceName,
       };
 
       const candidate = await suspectsCollection.findOne({ steamId: steamId });

@@ -75,5 +75,6 @@
     "login_with_faceit": "Login with Faceit",
     "app_name": "CS-SENTINEL",
     "logout": "Logout",
-    "profile": "Profile"
+    "profile": "Profile",
+    "no_evidence_to_review": "No evidence to review"
 }

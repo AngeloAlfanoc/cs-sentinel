@@ -49,12 +49,14 @@ const SuspectComments: React.FC<Properties> = ({ steamId }) => {
         <div key={comment.commentId} className='bg-gray-700 p-3 rounded-lg shadow'>
           <div className='flex items-center justify-between text-sm text-gray-400'>
             <h5 className='font-bold text-gray-300'>{comment.user.email}</h5>
-            <span className='text-gray-500'>{comment.timeStamp}</span>
-            {user?.user?.id === comment.user.userId && (
-              <button onClick={() => handleDelete(comment.commentId)}>
-                <FontAwesomeIcon icon={faTrash} />
-              </button>
-            )}
+            <div className='flex items-center'>
+              <span className='text-gray-500 mr-2'>{comment.timeStamp}</span>
+              {user?.user?.id === comment.user.userId && (
+                <button onClick={() => handleDelete(comment.commentId)}>
+                  <FontAwesomeIcon icon={faTrash} />
+                </button>
+              )}
+            </div>
           </div>
           <p className='mt-1 text-gray-200'>{comment.message}</p>
         </div>

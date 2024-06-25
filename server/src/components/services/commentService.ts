@@ -3,6 +3,7 @@ import { Collection, ObjectId } from 'mongodb';
 import { Comment } from '@/types/request/comment';
 import MongoDB from '@/db/database';
 import { ReqUser } from '@/types/request/user';
+import { timeSince } from '@/helpers/date-helpers';
 
 interface DBCollections {
   suspectCommentsCollection: Collection;
@@ -55,6 +56,7 @@ export class CommentService {
 
     const comments = await suspectCommentsCollection
       .find({ steamId: steamId })
+      .sort({ timeStamp: -1 }) // Sort by timestamp in descending order
       .toArray();
 
     const commentsWithUserInfo = await Promise.all(
@@ -66,6 +68,7 @@ export class CommentService {
           return {
             message: comment.message,
             commentId: comment._id,
+            timeStamp: timeSince(comment.timeStamp),
             user: {
               userId: user?._id,
               email: user?.email ?? '',
@@ -93,6 +96,8 @@ export class CommentService {
 
     const comments = await evidenceCommentsCollection
       .find({ evidenceId: evidenceId })
+      .sort({ timeStamp: -1 }) // Sort by timestamp in descending order
+
       .toArray();
 
     if (!comments) {
@@ -108,6 +113,7 @@ export class CommentService {
           return {
             message: comment.message,
             commentId: comment._id,
+            timeStamp: timeSince(comment.timeStamp),
             user: {
               userId: user?._id,
               email: user?.email ?? '',
