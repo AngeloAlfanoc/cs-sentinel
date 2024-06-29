@@ -101,51 +101,68 @@ export class SuspectService {
 
   static async getAllSuspects() {
     try {
-      const { suspectsCollection, evidenceCollection, linksCollection } =
-        await SuspectService.initDBCollections();
+      const {
+        suspectsCollection,
+        evidenceCollection,
+        linksCollection,
+        suspectRelationShip,
+      } = await SuspectService.initDBCollections();
 
       const suspects = await suspectsCollection.find({}).toArray();
       const evidence = await evidenceCollection.find({}).toArray();
       const links = await linksCollection.find({}).toArray();
-
-      const suspectsMap = new Map(
+      const relationships = await suspectRelationShip.find({}).toArray();
+      console.log(suspects)
+      const suspectsMap: any = new Map(
         suspects.map((suspect) => [
           suspect.steamId,
           {
-            ...suspect,
-            evidence: [],
+            avatar: suspect.avatar,
+            personaName: suspect.personaName,
+            profileUrl: suspect.profileUrl,
+            steamId: suspect.steamId,
+            steamProfileLink: suspect.steamProfileLink,
+            _id: String(suspect._id),
             links: [],
+            evidenceCount: 0,
+            relationshipsCount: 0,
           },
         ])
       );
 
       evidence.forEach((evidenceItem) => {
         if (suspectsMap.has(evidenceItem.steamId)) {
-          const suspect: any = suspectsMap.get(evidenceItem.steamId);
-          suspect.evidence.push({
-            evidenceId: String(evidenceItem._id),
-            description: evidenceItem.description,
-            videoLink: evidenceItem.videoLink,
-            type: evidenceItem.type,
-            steamId: evidenceItem.steamId,
-            steamLink: evidenceItem.steamLink,
-          });
+          const suspect = suspectsMap.get(evidenceItem.steamId);
+          if (suspect) {
+            suspect.evidenceCount += 1;
+          }
         }
       });
 
       links.forEach((linkItem) => {
         if (suspectsMap.has(linkItem.steamId)) {
-          const suspect: any = suspectsMap.get(linkItem.steamId);
-          suspect.links.push({
-            linkId: String(linkItem._id),
-            link: linkItem.link,
-            type: linkItem.type,
-            steamId: linkItem.steamId,
-          });
+          const suspect = suspectsMap.get(linkItem.steamId);
+          if (suspect) {
+            suspect.links.push({
+              linkId: String(linkItem._id),
+              link: linkItem.link,
+              type: linkItem.type,
+              steamId: linkItem.steamId,
+            });
+          }
         }
       });
 
-      // Convert the map back to an array of suspects, each with their evidence
+      relationships.forEach((relationshipItem) => {
+        if (suspectsMap.has(relationshipItem.steamId)) {
+          const suspect = suspectsMap.get(relationshipItem.steamId);
+          if (suspect) {
+            suspect.relationshipsCount += 1;
+          }
+        }
+      });
+
+      // Convert the map back to an array of suspects with counts
       const combinedData = Array.from(suspectsMap.values());
 
       return combinedData;

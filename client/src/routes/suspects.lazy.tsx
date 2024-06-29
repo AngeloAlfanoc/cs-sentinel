@@ -44,6 +44,9 @@ function Suspects() {
             <th className='text-left px-4 py-2 w-40 border-b border-gray-700'>{t('name')}</th>
             <th className='text-left px-4 py-2 w-40 border-b border-gray-700'>{t('links')}</th>
             <th className='text-left px-4 py-2 w-40 border-b border-gray-700'>{t('evidences')}</th>
+            <th className='text-left px-4 py-2 w-40 border-b border-gray-700'>
+              {t('relationships')}
+            </th>
             <th className='text-right px-4 py-2 border-b border-gray-700'></th>
           </tr>
         </thead>
@@ -76,7 +79,10 @@ function Suspects() {
                   </div>
                 </td>
                 <td className='px-4 py-2 border-b border-gray-600 text-center'>
-                  {suspect.evidence.length}
+                  {suspect.evidenceCount}
+                </td>
+                <td className='px-4 py-2 border-b border-gray-600 text-center'>
+                  {suspect.relationshipsCount}
                 </td>
                 <td className='px-4 py-2 border-b border-gray-600 text-right text-indigo-400'>
                   {t('go_to_suspect')}

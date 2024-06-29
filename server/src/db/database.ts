@@ -1,4 +1,3 @@
-// db/database.ts
 import { MongoClient, MongoClientOptions, Db } from 'mongodb';
 import CONFIG from '@/config';
 
@@ -8,7 +7,6 @@ export class MongoDB {
 
   public static async connectDB(): Promise<Db> {
     if (!this.dbInstance) {
-      // Check if dbInstance does not already exist
       const mongoClientOptions: MongoClientOptions = {
         tls: true,
         connectTimeoutMS: 30000,
@@ -25,8 +23,8 @@ export class MongoDB {
       this.client = new MongoClient(CONFIG.DB.URI!, mongoClientOptions);
 
       try {
-        await this.client.connect(); // Connect the MongoDB client
-        this.dbInstance = this.client.db('methods'); // Use your specific database name
+        await this.client.connect();
+        this.dbInstance = this.client.db('methods');
         console.log('Connected to MongoDB');
       } catch (error) {
         console.error('Could not connect to MongoDB', error);
@@ -34,6 +32,13 @@ export class MongoDB {
       }
     }
 
+    return this.dbInstance;
+  }
+
+  public static getDbInstance(): Db {
+    if (!this.dbInstance) {
+      throw new Error('Database not initialized. Call connectDB first.');
+    }
     return this.dbInstance;
   }
 

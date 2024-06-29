@@ -39,7 +39,6 @@ function Suspect() {
     enabled: !!steamId
   });
 
-
   if (suspectLoading) return <div className='text-white'>{t('loading')}</div>;
   if (suspectError instanceof Error)
     return <div className='text-red-500'>{`${t('error_occurred')} ${suspectError.message}`}</div>;
@@ -88,7 +87,6 @@ function Suspect() {
       }
     ]
   };
-
 
   return (
     <Tabs defaultIndex={0}>
@@ -153,7 +151,7 @@ function Suspect() {
           </div>
         </div>
         <div className='p-5 bg-gray-800 text-white rounded-lg '>
-          <Relationships  name={data.name} children={data.children} />
+          <Relationships name={data.name} children={data.children} />
         </div>
       </TabPanel>
     </Tabs>

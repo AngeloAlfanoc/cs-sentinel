@@ -12,6 +12,9 @@ export type SuspectData = {
   faceitLink?: string;
   evidence: EvidenceData[];
   links: SuspectLink[];
+  evidenceCount: number;
+  relationshipsCount: number;
+  steamRepLink?: string;
 };
 
 export type SuspectsResponseData = {

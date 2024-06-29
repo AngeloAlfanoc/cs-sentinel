@@ -1,14 +1,27 @@
 import jwt from 'jsonwebtoken';
+import { Response, NextFunction } from 'express';
 
-function authenticateToken(req: any, res: any, next: any) {
+export const authenticateToken = (
+  req: any,
+  res: Response,
+  next: NextFunction
+) => {
   const token = req.cookies.token;
-  if (token == null) return res.sendStatus(401);
+  if (!token) {
+    return res
+      .status(401)
+      .json({ message: 'Access token is missing or invalid' });
+  }
 
   jwt.verify(token, process.env.JWT_SECRET_KEY!, (err: any, user: any) => {
-    if (err) return res.sendStatus(403);
+    if (err) {
+      return res.status(403).json({ message: 'Token verification failed' });
+    }
     req.user = user;
     next();
+    return;
   });
-}
 
-module.exports = { authenticateToken };
+  // Adding a return statement at the end
+  return;
+};

@@ -2,7 +2,6 @@
 import { createLazyFileRoute } from '@tanstack/react-router';
 import { fetchEvidencesByFlagged } from '../api/evidence';
 import EvidenceReel from '../components/EvidenceReel';
-import SwipeableViews from 'react-swipeable-views';
 import { useState } from 'react';
 import { EvidenceData } from '../types/evidence';
 import { useQuery } from '@tanstack/react-query';
@@ -26,11 +25,6 @@ function Index() {
   if (isLoading) return <div>{t('loading_evidence')}</div>;
   if (isError) return <div>{`${t('error_occurred')} ${error?.message}`}</div>;
 
-  const handleVote = (id: string, type: string) => {
-    console.log(`Voted ${type} on ${id}`);
-    return type;
-  };
-
   const handleScroll = throttle((event: React.WheelEvent<HTMLDivElement>) => {
     const operator = event.deltaY / 100;
     const newIndex = index + operator;
@@ -52,8 +46,7 @@ function Index() {
                 <div className='text-white text-3xl font-bold flex justify-start'>
                   <h2>{evidence.name}</h2>
                 </div>
-
-                <EvidenceReel evidence={evidence} onVote={handleVote} />
+                <EvidenceReel evidence={evidence} />
               </div>
             ))
           ) : (

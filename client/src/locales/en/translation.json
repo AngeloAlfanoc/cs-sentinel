@@ -76,5 +76,34 @@
     "app_name": "CS-SENTINEL",
     "logout": "Logout",
     "profile": "Profile",
-    "no_evidence_to_review": "No evidence to review"
+    "no_evidence_to_review": "No evidence to review",
+    "relationships": "Relationships",
+    "review_resolution_content": {
+        "intro": "Now that you've reviewed the evidence, it is your duty to determine the facts for each of the categories below. Note that for each category of disruption you should <span className='font-bold'>presume the suspect to be innocent</span>. Only if you are confident that you witnessed behavior that would be agreed upon by the CS:GO community to be disruptive, anti-competitive, and/or anti-social <span className='font-bold'>beyond a reasonable doubt</span> should you select <span className='font-bold'>Evident Beyond a Reasonable Doubt</span>. If you are not 100% confident in your decision, you should select <span className='font-bold'>Insufficient Evidence</span>.",
+        "postpone": "If you don't feel that you were able to dedicate the appropriate attention level required to reach a verdict, please click on <span className='font-bold'>Postpone Judgement</span>. The case will remain available for you to review at a later time.",
+        "aim_assistance": {
+            "title": "Major Disruption: Aim Assistance",
+            "description": "The evidence you reviewed would be judged, by any reasonable member of the CS:GO community, as clearly demonstrating that The Suspect <span className='font-bold'>used external software to improve their aim</span>, e.g. automated targeting, recoil reduction or elimination, etc.",
+            "insufficient": "Insufficient Evidence",
+            "evident": "Evident Beyond a Reasonable Doubt"
+        },
+        "vision_assistance": {
+            "title": "Major Disruption: Vision Assistance",
+            "description": "The evidence you reviewed would be judged, by any reasonable member of the CS:GO community, as clearly demonstrating that The Suspect <span className='font-bold'>used external software to gain information about locations of their opponents</span>, e.g. vision through walls or smoke, flashbang effect reduction or elimination, etc.",
+            "insufficient": "Insufficient Evidence",
+            "evident": "Evident Beyond a Reasonable Doubt"
+        },
+        "external_assistance": {
+            "title": "Major Disruption: Other External Assistance",
+            "description": "The evidence you reviewed would be judged, by any reasonable member of the CS:GO community, as clearly demonstrating that The Suspect <span className='font-bold'>used external software other than those listed above to gain an advantage over their opponents</span>, e.g. speedhacking, automated jumping scripts, upside-down views, etc.",
+            "insufficient": "Insufficient Evidence",
+            "evident": "Evident Beyond a Reasonable Doubt"
+        },
+        "griefing": {
+            "title": "Minor Disruption: Griefing",
+            "description": "The evidence you reviewed would be judged, by any reasonable member of the CS:GO community, as clearly demonstrating that The Suspect <span className='font-bold'>exhibited behavior that was disruptive, anti-competitive, and/or anti-social</span>, e.g. deliberately interfering with or trying to damage or be damaged by teammates, or deliberately losing the match.",
+            "insufficient": "Insufficient Evidence",
+            "evident": "Evident Beyond a Reasonable Doubt"
+        }
+    }
 }

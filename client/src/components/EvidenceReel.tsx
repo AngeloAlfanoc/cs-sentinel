@@ -14,22 +14,24 @@ import { fetchEvidenceCommentsByEvidenceId } from '../api/suspect';
 import { useNavigate } from '@tanstack/react-router';
 import useModalStore from '../stores/useModalStore';
 import ReviewResolutionContent from './Modal/ReviewResolutionContent';
-import ReviewResolutionFooter from './Modal/ReviewResolutionFooter';
 import { flagEvidenceByUser } from '../api/evidence';
 import queryClient from '../helpers/withQueryClient';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import { Formik } from 'formik';
 
 type EvidenceProperties = {
   evidence: EvidenceData;
-  onVote: (id: string, type: string) => void;
 };
 
-const EvidenceReel: React.FC<EvidenceProperties> = ({ evidence, onVote }) => {
+const EvidenceReel: React.FC<EvidenceProperties> = ({ evidence }) => {
+  const { t } = useTranslation();
   const { toggleModal, setPayload } = useModalStore();
   const navigate = useNavigate();
   const playerReference = useRef<HTMLDivElement | null>(null);
   const playerInstance = useRef<ReturnType<typeof YouTubePlayer> | null>(null);
   const [isInView, setIsInView] = useState(false);
-
+  const formikReference = useRef(null);
   const { data: comments, isLoading: commentsLoading } = useQuery({
     queryKey: ['evidenceComments', evidence._id],
     queryFn: () => fetchEvidenceCommentsByEvidenceId(evidence._id),
@@ -100,9 +102,14 @@ const EvidenceReel: React.FC<EvidenceProperties> = ({ evidence, onVote }) => {
     setPayload({
       modalHeader: <div className='bg-gray-700 px-8 py-4'>Sentinel Resolution</div>,
       modalContent: <ReviewResolutionContent />,
-      modalFooter: <ReviewResolutionFooter />
+      modalFooter: <div></div>
     });
     toggleModal();
+  };
+
+  const copyLink = (evidenceId: string) => {
+    navigator.clipboard.writeText(`${window.location.href}evidence/${evidenceId}`);
+    toast.success(t('link_copied'));
   };
 
   return (
@@ -143,7 +150,7 @@ const EvidenceReel: React.FC<EvidenceProperties> = ({ evidence, onVote }) => {
             >
               <FontAwesomeIcon icon={faComment} />
               {amountOfComments > 0 && (
-                <span className='absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full transform translate-x-1/2 -translate-y-1/2'>
+                <span className='absolute top-0 right-50 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full transform translate-x-1/2 -translate-y-1/2'>
                   {amountOfComments}
                 </span>
               )}
@@ -167,7 +174,7 @@ const EvidenceReel: React.FC<EvidenceProperties> = ({ evidence, onVote }) => {
           <button
             type='button'
             className='text-gray-700 bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-full text-xl h-12 w-12 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700 flex items-center justify-center'
-            onClick={() => onVote(evidence._id, 'share')}
+            onClick={() => copyLink(evidence._id)}
             data-tooltip='Share'
           >
             <FontAwesomeIcon icon={faShare} />
